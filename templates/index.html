@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Welcome | Student Portal{% endblock %}
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Learn Anywhere, Anytime</h1>
+        <p>Access courses, video lectures, quizzes, and performance reports in one simple portal.</p>
+        {% if not current_user.is_authenticated %}
+            <div class="hero-actions">
+                <a href="{{ url_for('register') }}" class="btn primary">Get Started</a>
+                <a href="{{ url_for('login') }}" class="btn secondary">Login</a>
+            </div>
+        {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn primary">Go to Dashboard</a>
+        {% endif %}
+    </div>
+</section>
+
+<section>
+    <h2>Latest Courses</h2>
+    <div class="cards">
+        {% for course in courses %}
+            <article class="card">
+                <h3>{{ course.title }}</h3>
+                <p>{{ course.description or "No description provided." }}</p>
+                <p class="muted">By {{ course.instructor.username }}</p>
+                {% if current_user.is_authenticated %}
+                    <div class="toolbar">
+                        <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn small secondary">View</a>
+                        {% if current_user.is_instructor() and current_user.id == course.instructor_id %}
+                            <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn small">Manage</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </article>
+        {% else %}
+            <p>No courses available yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+

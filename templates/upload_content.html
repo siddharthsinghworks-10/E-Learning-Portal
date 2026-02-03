@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Upload Content{% endblock %}
+{% block content %}
+<h1>Upload Content for {{ course.title }}</h1>
+<form method="post" enctype="multipart/form-data" class="form">
+    <label>
+        Title
+        <input type="text" name="title" required>
+    </label>
+    <label>
+        Description
+        <textarea name="description" rows="3"></textarea>
+    </label>
+    <label>
+        Content Type
+        <select name="content_type">
+            <option value="video">Video</option>
+            <option value="pdf">PDF</option>
+            <option value="other">Other</option>
+        </select>
+    </label>
+    <label>
+        File
+        <input type="file" name="file" required>
+    </label>
+    <button class="btn primary" type="submit">Upload</button>
+</form>
+{% endblock %}
+

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Result · {{ quiz.title }}{% endblock %}
+{% block content %}
+<h1>Quiz Result: {{ quiz.title }}</h1>
+<p class="muted">Score: {{ attempt.score or 0 }}% · Completed at: {{ attempt.completed_at or "-" }}</p>
+
+<section>
+    <h2>Questions & Answers</h2>
+    {% for question in quiz.questions %}
+        {% set answer = answers_by_q.get(question.id) %}
+        {% set correct_choice = None %}
+        {% for choice in question.choices %}
+            {% if choice.is_correct %}
+                {% set correct_choice = choice %}
+            {% endif %}
+        {% endfor %}
+        {% set student_choice = None %}
+        {% if answer %}
+            {% for choice in question.choices %}
+                {% if choice.id == answer.choice_id %}
+                    {% set student_choice = choice %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="question-block">
+            <strong>Q{{ loop.index }}. {{ question.text }}</strong>
+            <ul class="list">
+                {% for choice in question.choices %}
+                    {% set is_correct = correct_choice and choice.id == correct_choice.id %}
+                    {% set is_student = student_choice and choice.id == student_choice.id %}
+                    <li>
+                        {% if is_correct and is_student %}
+                            <span class="answer-student-correct"> Your choice (correct): {{ choice.text }}</span>
+                        {% elif is_correct %}
+                            <span class="answer-correct"> Correct: {{ choice.text }}</span>
+                        {% elif is_student %}
+                            <span class="answer-student-wrong"> Your choice (incorrect): {{ choice.text }}</span>
+                        {% else %}
+                            {{ choice.text }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+</section>
+
+<section>
+    <h2>Correct Answers Overview</h2>
+    <ol class="list">
+        {% for question in quiz.questions %}
+            {% set correct_choice = None %}
+            {% for choice in question.choices %}
+                {% if choice.is_correct %}
+                    {% set correct_choice = choice %}
+                {% endif %}
+            {% endfor %}
+            <li>
+                <strong>Q{{ loop.index }}:</strong> {{ question.text }}<br>
+                <span class="answer-correct">
+                    Correct answer: {{ correct_choice.text if correct_choice else "Not set" }}
+                </span>
+            </li>
+        {% endfor %}
+    </ol>
+</section>
+
+<div class="toolbar">
+    <a class="btn small secondary" href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+</div>
+{% endblock %}
+

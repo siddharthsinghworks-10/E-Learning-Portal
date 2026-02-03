@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Instructor Dashboard{% endblock %}
+{% block content %}
+<h1>Instructor Dashboard</h1>
+
+<section class="toolbar">
+    <a href="{{ url_for('create_course') }}" class="btn primary">Create New Course</a>
+</section>
+
+<section>
+    <h2>Your Courses</h2>
+    <div class="cards">
+        {% for course in courses %}
+            <article class="card">
+                <h3>{{ course.title }}</h3>
+                <p>{{ course.description or "No description." }}</p>
+                <div class="toolbar">
+                    <a class="btn small secondary" href="{{ url_for('course_detail', course_id=course.id) }}">View</a>
+                    <a class="btn small" href="{{ url_for('course_detail', course_id=course.id) }}">Manage</a>
+                </div>
+            </article>
+        {% else %}
+            <p>You have not created any courses yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Your Quizzes</h2>
+    <ul class="list">
+        {% for quiz in quizzes %}
+            <li>
+                <strong>{{ quiz.title }}</strong> ({{ quiz.course.title }})
+                <a class="btn small secondary" href="{{ url_for('course_detail', course_id=quiz.course.id) }}">Manage</a>
+            </li>
+        {% else %}
+            <li>No quizzes created yet.</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}
+
