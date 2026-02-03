@@ -552,7 +552,7 @@ def register_routes(app: Flask) -> None:
 
 
 # Application entry point
-if __name__ == "__main__":
+if __name__ == "__app__":
     app = create_app()
     with app.app_context():
         db.create_all()
