@@ -126,7 +126,6 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quiz_id = db.Column(db.Integer, db.ForeignKey("quiz.id"), nullable=False)
     text = db.Column(db.Text, nullable=False)
-
     choices = db.relationship("Choice", backref="question", lazy=True, cascade="all, delete-orphan")
 
 
@@ -144,7 +143,6 @@ class Attempt(db.Model):
     started_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
     score = db.Column(db.Float, nullable=True)
-
     answers = db.relationship("AttemptAnswer", backref="attempt", lazy=True, cascade="all, delete-orphan")
 
 
@@ -153,7 +151,6 @@ class AttemptAnswer(db.Model):
     attempt_id = db.Column(db.Integer, db.ForeignKey("attempt.id"), nullable=False)
     question_id = db.Column(db.Integer, db.ForeignKey("question.id"), nullable=False)
     choice_id = db.Column(db.Integer, db.ForeignKey("choice.id"), nullable=False)
-
     choice = db.relationship("Choice")
 
 
