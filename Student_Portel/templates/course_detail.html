@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }} | Course{% endblock %}
+{% block content %}
+<h1>{{ course.title }}</h1>
+<p>{{ course.description or "No description." }}</p>
+<p class="muted">Instructor: {{ course.instructor.username }}</p>
+
+<div class="toolbar">
+    {% if current_user.is_student() %}
+        {% if enrolled %}
+            <form method="post" action="{{ url_for('unenroll_course', course_id=course.id) }}" style="display:inline;">
+                <button class="btn secondary" type="submit">Unenroll</button>
+            </form>
+        {% else %}
+            <form method="post" action="{{ url_for('enroll_course', course_id=course.id) }}" style="display:inline;">
+                <button class="btn primary" type="submit">Enroll</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    {% if current_user.is_instructor() and current_user.id == course.instructor_id %}
+        <a class="btn secondary" href="{{ url_for('upload_content', course_id=course.id) }}">Upload Content</a>
+        <a class="btn secondary" href="{{ url_for('create_quiz', course_id=course.id) }}">Create Quiz</a>
+        <form method="post" action="{{ url_for('delete_course', course_id=course.id) }}" style="display:inline;"
+              onsubmit="return confirm('Are you sure you want to delete this course and all its content/quizzes?');">
+            <button class="btn small" type="submit">Delete Course</button>
+        </form>
+    {% endif %}
+</div>
+
+<section>
+    <h2>Learning Materials</h2>
+    {% if course.contents %}
+        <div class="cards">
+            {% for content in course.contents %}
+                <article class="card">
+                    <h3>{{ content.title }}</h3>
+                    <p class="muted">{{ content.content_type|capitalize }}</p>
+                    <p class="card-desc">{{ content.description or "No description for this material." }}</p>
+                    <div class="toolbar">
+                        <a class="btn small secondary"
+                           href="{{ url_for('view_content', content_id=content.id) }}">
+                            Open Content
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No content uploaded yet.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h2>Quizzes</h2>
+    {% if course.quizzes %}
+        <div class="cards">
+            {% for quiz in course.quizzes %}
+                <article class="card">
+                    <h3>{{ quiz.title }}</h3>
+                    <div class="toolbar">
+                        {% if current_user.is_student() %}
+                            <a class="btn small primary" href="{{ url_for('take_quiz', quiz_id=quiz.id) }}">Take Quiz</a>
+                        {% endif %}
+                        {% if current_user.is_instructor() and current_user.id == course.instructor_id %}
+                            <a class="btn small secondary" href="{{ url_for('edit_quiz', quiz_id=quiz.id) }}">Edit Quiz</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No quizzes available for this course.</p>
+    {% endif %}
+</section>
+{% endblock %}
+

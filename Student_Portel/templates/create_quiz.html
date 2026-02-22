@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block title %}Create Quiz{% endblock %}
+{% block content %}
+<h1>Create Quiz for {{ course.title }}</h1>
+<form method="post" class="form" id="quiz-form">
+    <label>
+        Quiz Title
+        <input type="text" name="title" required>
+    </label>
+
+    <h2>Questions</h2>
+    <p class="muted">Add as many questions as you need. Each question can have up to 4 choices.</p>
+
+    <div id="questions-container">
+        <fieldset class="question-block" data-question-index="1">
+            <div class="question-header">
+                <legend>Question 1</legend>
+                <button type="button" class="btn-remove" title="Remove question" aria-label="Remove question">−</button>
+            </div>
+            <label>
+                Text
+                <input type="text" name="q1_text" placeholder="Enter question text">
+            </label>
+            <div class="choices">
+                <label>
+                    Choice 1
+                    <input type="text" name="q1_choice1" placeholder="Option 1">
+                </label>
+                <label>
+                    Choice 2
+                    <input type="text" name="q1_choice2" placeholder="Option 2">
+                </label>
+                <label>
+                    Choice 3
+                    <input type="text" name="q1_choice3" placeholder="Option 3">
+                </label>
+                <label>
+                    Choice 4
+                    <input type="text" name="q1_choice4" placeholder="Option 4">
+                </label>
+            </div>
+            <label>
+                Correct option (1–4)
+                <select name="q1_correct">
+                    <option value="">— Select —</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </label>
+        </fieldset>
+    </div>
+
+    <div class="toolbar">
+        <button type="button" class="btn secondary" id="btn-add-question" title="Add question">+ Add Question</button>
+    </div>
+
+    <button class="btn primary" type="submit">Create Quiz</button>
+</form>
+
+<template id="question-template">
+    <fieldset class="question-block" data-question-index="">
+        <div class="question-header">
+            <legend></legend>
+            <button type="button" class="btn-remove" title="Remove question" aria-label="Remove question">−</button>
+        </div>
+        <label>
+            Text
+            <input type="text" name="" placeholder="Enter question text">
+        </label>
+        <div class="choices">
+            <label>
+                Choice 1
+                <input type="text" name="" placeholder="Option 1">
+            </label>
+            <label>
+                Choice 2
+                <input type="text" name="" placeholder="Option 2">
+            </label>
+            <label>
+                Choice 3
+                <input type="text" name="" placeholder="Option 3">
+            </label>
+            <label>
+                Choice 4
+                <input type="text" name="" placeholder="Option 4">
+            </label>
+        </div>
+        <label>
+            Correct option (1–4)
+            <select name="">
+                <option value="">— Select —</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </label>
+    </fieldset>
+</template>
+
+<script>
+(function() {
+    const container = document.getElementById('questions-container');
+    const template = document.getElementById('question-template');
+    const btnAdd = document.getElementById('btn-add-question');
+
+    function getQuestionCount() {
+        return container.querySelectorAll('.question-block').length;
+    }
+
+    function renumberQuestions() {
+        const blocks = container.querySelectorAll('.question-block');
+        blocks.forEach(function(block, i) {
+            const idx = i + 1;
+            block.dataset.questionIndex = idx;
+            block.querySelector('legend').textContent = 'Question ' + idx;
+
+            block.querySelector('input[placeholder="Enter question text"]').name = 'q' + idx + '_text';
+            block.querySelectorAll('.choices input').forEach(function(inp, j) {
+                inp.name = 'q' + idx + '_choice' + (j + 1);
+            });
+            block.querySelector('select').name = 'q' + idx + '_correct';
+        });
+
+        // Show/hide remove buttons
+        const removeBtns = container.querySelectorAll('.btn-remove');
+        removeBtns.forEach(function(btn) {
+            btn.style.visibility = getQuestionCount() > 1 ? 'visible' : 'hidden';
+        });
+    }
+
+    function addQuestion() {
+        const clone = template.content.cloneNode(true);
+        container.appendChild(clone);
+        renumberQuestions();
+    }
+
+    function removeQuestion(block) {
+        if (getQuestionCount() <= 1) return;
+        block.remove();
+        renumberQuestions();
+    }
+
+    btnAdd.addEventListener('click', addQuestion);
+
+    container.addEventListener('click', function(e) {
+        if (e.target.classList.contains('btn-remove')) {
+            removeQuestion(e.target.closest('.question-block'));
+        }
+    });
+
+    // Initial visibility for single question
+    renumberQuestions();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<h1>Student Dashboard</h1>
+
+<section>
+    <h2>Your Enrollments</h2>
+    <div class="cards">
+        {% for enrollment in enrollments %}
+            <article class="card">
+                <h3>{{ enrollment.course.title }}</h3>
+                <p class="card-desc">{{ enrollment.course.description or "No description." }}</p>
+                <div class="toolbar">
+                    <a class="btn small primary" href="{{ url_for('course_detail', course_id=enrollment.course.id) }}">
+                        Open Course
+                    </a>
+                </div>
+            </article>
+        {% else %}
+            <p>You are not enrolled in any courses yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Quiz Performance</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Quiz</th>
+            <th>Score</th>
+            <th>Completed At</th>
+            <th>Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for attempt in attempts %}
+            <tr>
+                <td>{{ attempt.quiz.title }}</td>
+                <td>{{ attempt.score or 0 }}%</td>
+                <td>{{ attempt.completed_at or "-" }}</td>
+                <td>
+                    {% if attempt.completed_at %}
+                        <a class="btn small secondary" href="{{ url_for('view_attempt_result', attempt_id=attempt.id) }}">
+                            View Result
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No quiz attempts yet.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
+
