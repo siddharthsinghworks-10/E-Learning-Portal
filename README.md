@@ -16,7 +16,7 @@ Python / Flask based E-Learning portal that supports:
 
 ## Project structure
 
-- `main.py` – Flask app, models, and routes
+- `app.py` – Flask app, models, and routes
 - `templates/` – HTML templates (Jinja2)
 - `static/style.css` – global styles
 - `uploads/` – uploaded files (created automatically at runtime)
@@ -37,13 +37,13 @@ pip install -r requirements.txt
 Initialize the database (optional but recommended to reset cleanly):
 
 ```bash
-flask --app main.py init-db
+flask --app app.py init-db
 ```
 
 Run the development server:
 
 ```bash
-python main.py
+python app.py
 ```
 
 Then open `http://127.0.0.1:5000/` in your browser.
