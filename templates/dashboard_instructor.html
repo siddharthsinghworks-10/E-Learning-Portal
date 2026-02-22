@@ -13,7 +13,7 @@
         {% for course in courses %}
             <article class="card">
                 <h3>{{ course.title }}</h3>
-                <p>{{ course.description or "No description." }}</p>
+                <p class="card-desc">{{ course.description or "No description." }}</p>
                 <div class="toolbar">
                     <a class="btn small secondary" href="{{ url_for('course_detail', course_id=course.id) }}">View</a>
                     <a class="btn small" href="{{ url_for('course_detail', course_id=course.id) }}">Manage</a>

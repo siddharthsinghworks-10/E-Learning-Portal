@@ -22,7 +22,7 @@
         {% for course in courses %}
             <article class="card">
                 <h3>{{ course.title }}</h3>
-                <p>{{ course.description or "No description provided." }}</p>
+                <p class="card-desc">{{ course.description or "No description provided." }}</p>
                 <p class="muted">By {{ course.instructor.username }}</p>
                 {% if current_user.is_authenticated %}
                     <div class="toolbar">

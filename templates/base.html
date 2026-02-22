@@ -24,7 +24,7 @@
     </div>
 </header>
 
-<main class="container">
+<main class="container main-content">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-container">
@@ -35,15 +35,14 @@
         {% endif %}
     {% endwith %}
 
-    {% block content %}{% endblock %}
+    <div class="main-inner">
+        {% block content %}{% endblock %}
+    </div>
 </main>
 
 <footer class="footer">
     <div class="container">
         <small>&copy; {{ 2026 }} E-Learning Management Portal</small>
-    </div>
-    <div class="container">
-        <small> By:- Bhalu and his Teammate </small>
     </div>
 </footer>
 

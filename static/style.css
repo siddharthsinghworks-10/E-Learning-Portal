@@ -19,17 +19,33 @@
     box-sizing: border-box;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: radial-gradient(circle at top left, #eff6ff 0, #f5f7fb 40%, #eef2ff 100%);
     color: var(--text);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    text-align: left;
 }
 
 .container {
-    max-width: 1300px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 1rem 1rem 1rem;
+    padding: 1rem 1.25rem 2.5rem;
+    text-align: left;
+}
+
+/* Main content container: no centering of content */
+main.container {
+    text-align: left;
+    align-items: stretch;
 }
 
 .topbar {
@@ -45,7 +61,7 @@ body {
 
 .logo {
     font-weight: 700;
-    font-size: 3rem;
+    font-size: 2rem;
     color: #fff;
     text-decoration: none;
 }
@@ -63,6 +79,30 @@ nav a:hover {
 
 main {
     margin-top: 1.5rem;
+    flex: 1 0 auto;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    text-align: left;
+}
+
+.main-inner {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 auto;
+    text-align: left;
+}
+
+/* Force main content to stay top-left; overrides any centering */
+main.main-content {
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+}
+
+main.main-content .main-inner {
+    align-self: stretch !important;
 }
 
 .hero {
@@ -101,6 +141,7 @@ h1, h2, h3 {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
+    align-items: start;
 }
 
 .card {
@@ -109,10 +150,23 @@ h1, h2, h3 {
     padding: 1rem 1.1rem;
     border: 1px solid var(--border);
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+    min-height: 210px;
+    justify-content: flex-start;
 }
 
 .card h3 {
     margin-bottom: 0.35rem;
+}
+
+.card-desc {
+    flex: 1 1 auto;
+    margin-bottom: 0.35rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .muted {
@@ -281,6 +335,36 @@ h1, h2, h3 {
     font-weight: 600;
 }
 
+.question-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.question-header legend {
+    margin: 0;
+}
+
+.btn-remove {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: #fff;
+    color: var(--danger);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-remove:hover {
+    background: #fee2e2;
+}
+
 .choices {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -308,16 +392,16 @@ h1, h2, h3 {
 }
 
 .footer {
-    border-top: 2px solid var(--border);
+    border-top: 1px solid var(--border);
     background: #ffffffbf;
+    flex-shrink: 0;
 }
 
 .footer .container {
-    padding-top: 1rem;
-    padding-bottom: 0rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.9rem;
     text-align: center;
 }
-
 
 @media (max-width: 720px) {
     .hero {

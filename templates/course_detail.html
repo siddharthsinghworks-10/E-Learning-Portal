@@ -36,7 +36,7 @@
                 <article class="card">
                     <h3>{{ content.title }}</h3>
                     <p class="muted">{{ content.content_type|capitalize }}</p>
-                    <p>{{ content.description or "No description for this material." }}</p>
+                    <p class="card-desc">{{ content.description or "No description for this material." }}</p>
                     <div class="toolbar">
                         <a class="btn small secondary"
                            href="{{ url_for('view_content', content_id=content.id) }}">
